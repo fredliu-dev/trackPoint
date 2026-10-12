@@ -1,0 +1,21 @@
+{% comment %}
+  TrackPoint 运行时注入块:商家在主题编辑器的"应用嵌入"里启用一次即可。
+  规则不烘进 liquid,由 tracker.js 经 App Proxy(/a/trackpoint)实时拉取,
+  修改埋点配置即时生效,无需重新发布主题。
+{% endcomment %}
+<script>
+  window.__TRACKPOINT__ = window.__TRACKPOINT__ || {
+    proxyPath: "/a/trackpoint",
+    shop: {{ shop.permanent_domain | json }}
+  };
+</script>
+{%- comment -%} defer 为主题应用扩展强制要求(禁止解析阻塞脚本);仍在 DOMContentLoaded 前执行 {%- endcomment -%}
+<script src="{{ 'tracker.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "TrackPoint",
+  "target": "body",
+  "settings": []
+}
+{% endschema %}

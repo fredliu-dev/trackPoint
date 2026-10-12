@@ -32,3 +32,32 @@ model Session {
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
+
+// 埋点规则:按 店铺 + 页面类型 + handle 组织,店面运行时经 App Proxy 拉取
+model TrackingRule {
+  id         String   @id @default(cuid())
+  shop       String
+  pageType   String // "global" | "home" | "page" | "product" | "collection"
+  pageHandle String   @default("") // global/home 为空串
+  name       String // 商家可读名称,如 "Banner Shop Now 按钮"
+  eventName  String // GA4 event_name,如 "select_item"
+  ruleType   String // "click" | "api_response" | "exposure"
+  selector   String? // click/exposure:CSS 选择器
+  urlPattern String? // api_response:匹配请求 URL 的模式
+  matchMode  String   @default("contains") // "contains" | "regex"
+  enabled    Boolean  @default(true)
+  parameters String   @default("[]") // JSON: [{key, source(static|attr|text|json_path), value, transform?}]
+  options    String   @default("{}") // JSON: {threshold?, capture?}
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([shop, pageType, pageHandle])
+}
+
+// 店铺级设置:目前只有 GA4 接入(GTM 容器 ID,非空即由店面运行时注入)
+model TrackingSetting {
+  shop      String   @id
+  gtmId     String   @default("") // 如 "GTM-PLQLD5D",空 = 不注入(店铺已自接 GTM 时留空)
+  updatedAt DateTime @updatedAt
+}

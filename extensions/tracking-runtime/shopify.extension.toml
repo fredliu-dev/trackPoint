@@ -1,0 +1,8 @@
+api_version = "2026-10"
+
+[[extensions]]
+handle = "tracking-runtime"
+uid = "2f20f0c1-ebba-4746-e078-9bd995a0763eb5a986fc"
+type = "theme"
+name = "TrackPoint Runtime"
+description = "按页面配置的埋点规则运行时:点击 / 接口返回 / 曝光,推送 GA4 dataLayer"

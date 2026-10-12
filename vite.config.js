@@ -43,6 +43,10 @@ export default defineConfig({
     },
     port: Number(process.env.PORT || 3000),
     hmr: hmrConfig,
+    // 本仓库在 FSKit exFAT 卷上,macOS 会生成 ._* AppleDouble 副文件;忽略它们避免 watcher 误触发
+    watch: {
+      ignored: ["**/._*"],
+    },
     fs: {
       // See https://vitejs.dev/config/server-options.html#server-fs-allow for more information
       allow: ["app", "node_modules"],

@@ -7,7 +7,7 @@ embedded = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,write_metaobjects,write_metaobject_definitions"
+scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_online_store_pages"
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -46,6 +46,13 @@ api_version = "2026-10"
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]
+
+# 店面运行时经此代理拉取埋点规则(同源、HMAC 签名,免 CORS)
+# dev 时 automatically_update_urls_on_dev 会把 url 指向本地隧道
+[app_proxy]
+url = "https://example.com/api/tracking-rules"
+subpath = "trackpoint"
+prefix = "a"
 
 [build]
 include_config_on_deploy = true
